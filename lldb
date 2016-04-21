@@ -1,0 +1,53 @@
+#For this write-up, you will need the patched debugserver binary on your jailbroken device. I strongly suggest that you make the debugger over USB rather than WiFi unless you are not in a hurry and willing to drink a lot of coffee.
+
+#Copy the patched debugserver binary to your device. We can't just launch the application and attach to the running process. The jailbroken routine would kick us out. Instead, we need to launch the application from debugserver.
+#This can be done the following way:
+
+bin/debugserver -x backboard *:1234 /var/mobile/Containers/Bundle/Application/3C0FF7C8-C99A-4C34-AE18-54D613D6A0D3/{test.app}/test.app
+debugserver-@(#)PROGRAM:debugserver  PROJECT:debugserver-320.2.89
+ for armv7.
+Listening to port 1234 for a connection from *...
+
+#
+./debugserver -x backboard *:1234 /var/mobile/Applications/785185FA-23C1-413B-B2EC-85E5185C6F65/DamnVulnerableIOSApp.app/DamnVulnerableIOSApp
+
+##On your host
+$ lldb
+(lldb) process connect connect://127.0.0.1:1234
+Process 1338 stopped
+* thread #1: tid = 0xc282, 0x1fec4000 dyld`_dyld_start, stop reason = signal SIGSTOP
+    frame #0: 0x1fec4000 dyld`_dyld_start
+dyld`_dyld_start:
+-> 0x1fec4000:  mov    r8, sp
+   0x1fec4004:  sub    sp, sp, #0x10
+   0x1fec4008:  bic    sp, sp, #0x7
+   0x1fec400c:  ldr    r3, [pc, #112]            ; _dyld_start + 132
+(lldb) platform select remote-ios
+
+## See loaded libraries in memory
+(lldb) image list -o -f
+
+## Load modules for testing from local system
+(lldb) target modules add test.app/test
+
+##Set breakpoint in function name (can be obtained from class-dump-z)
+(lldb) breakpoint set --name "-[Env isJailbroken]" 
+
+##Read register (can also do normal GDB reads)
+(lldb) register read r0
+
+### Register write
+(lldb) register write r0 0
+
+## Dump memory at location
+(lldb) disassemble -s 0x12143a -c 3
+test`-[Env isJailbroken] + 38:
+   0x12143a:  movs   r4, #0x1         <-- Patching here to return 0 and not 1 if jailbroken.
+   0x12143c:  mov    r0, r4
+   0x12143e:  pop    {r4, r7, pc}
+
+(lldb) memory read -a 0x12143a -c 0x40
+0x0012143a: 01 24 20 46 90 bd f0 b5 03 af 2d e9 00 0d ad f1  .$ F.??.?-?..??
+0x0012144a: 40 04 24 f0 0f 04 a5 46 04 f9 ed 82 04 f9 ef c2  @.$?..?F.??..???
+0x0012145a: 9c b0 43 f6 a6 30 00 24 c0 f2 9a 00 4b f2 ca 01  .?C??0.$??..K??.
+0x0012146a: c0 f2 a7 01 42 f6 ce 62 0a ad c0 f2 a8 02 0a 94  ??.B??b.???...

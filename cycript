@@ -1,0 +1,77 @@
+#Get application instance
+var a = [[UIApplication sharedApplication]]
+
+#Find current view controller.  We must find keyWindow property
+UIApp.keyWindow
+
+#Find the root view controller for the application
+UIApp.keyWindow.rootViewController
+#Sample output -- "<ECSlidingViewController: 0x15e9b740>"
+
+
+#Get all windows
+[[UIApplication sharedApplication]].windows
+
+#Get object by address
+var p = new Instance(0x8614390)
+
+###Function to get methods
+function printMethods(className) {
+   var count = new new Type("I");
+   var methods = class_copyMethodList(objc_getClass(className), count);
+   var methodsArray = [];
+   for(var i = 0; i < *count; i++) {
+     var method = methods[i];
+     methodsArray.push({selector:method_getName(method), implementation:method_getImplementation(method)});
+   }
+   free(methods);
+   free(count);
+   return methodsArray;
+}
+###
+
+###Get methods matching RegExp
+function methodsMatching(cls, regexp) { return [[new Selector(m).type(cls), m] for (m in cls.messages) if (!regexp || regexp.test(m))]; }
+
+###Function to print ivars.  Prints out all variables used in a view controller
+function tryPrintIvars(a){ var x={}; for(i in *a){ try{ x[i] = (*a)[i]; } catch(e){} } return x; }
+
+## A dispatch table is a table containing entries that associate method selectors with the class-specific addresses they identify.
+##Methods are bound to messages in Runtime.  We can obtain them with the following:
+[Obj].messages
+
+####################
+#### Replace Objective-C methods
+####################
+#You can simulate MSHookMessage by replacing contents in the messages array, e.g.
+
+cy# original_NSRunLoop_description = NSRunLoop.messages['description'];
+0x339d94c3
+cy# NSRunLoop.messages['description'] = function() { return original_NSRunLoop_description.call(this).toString().substr(0, 80)+", etc."; }
+{}
+cy# [NSRunLoop currentRunLoop]
+"<CFRunLoop 0x205ee0 [0x381dbff4]>{locked = false, wait port = 0x1303, stopped = , etc."
+
+#Note the func.call(this) construct. This binds the this in the original function to the user-specified one. If more than one variable is needed, use function(arg1, arg2, arg3, ...) {...func.call(self, arg1, arg2, arg3, ...);}, e.g.
+
+cy# original_SpringBoard_menuButtonDown = SpringBoard.messages['menuButtonDown:']
+0x17dbab1
+cy# SpringBoard.messages['menuButtonDown:'] = function(arg1) {original_SpringBoard_menuButtonDown.call(this, arg1);}
+function (e) {var e;var $cy0=this;original_SpringBoard_menuButtonDown.call($cy0,e);}
+#Note that the subsequent arguments will not be automatically mapped to the corresponding Objective-C types, so instead of "foo" you will need to use [NSString stringWithString:"foo"].
+#######################
+#######################
+
+## Load frameworks
+function loadFramework(fw) {
+  var h="/System/Library/",t="Frameworks/"+fw+".framework";
+  [[NSBundle bundleWithPath:h+t]||[NSBundle bundleWithPath:h+"Private"+t] load];
+}
+
+
+
+
+###URL
+http://iphonedevwiki.net/index.php/Cycript_Tricks
+
+

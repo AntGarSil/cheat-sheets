@@ -1,0 +1,4 @@
+#Patch lobotomy on linux - from lobotomy install directory
+mv framework/brains/apk/loader.py framework/brains/apk/loader.old.py
+sed "s/from androguard.util import read/from util_androguard import read/" framework/brains/apk/loader.old.py >> framework/brains/apk/loader.py
+cp androguard/build/lib/androguard/util.py util_androguard.py

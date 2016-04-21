@@ -1,0 +1,4 @@
+#Check for binary encryption
+otool -l {bin} | grep LC_ENCRYPTION_INFO -A5
+
+#cryptid =0 encryption is disabled. cryptid=1 encryption enabled

@@ -1,0 +1,6 @@
+#### Define your own signatures in - signatures.py within the analyzer folder
+
+#### Filter may consist of several values
+classes_to_match
+methods_to_match
+args_to_match

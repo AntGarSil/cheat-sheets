@@ -1,0 +1,32 @@
+#Dumping encrypted binaries on IOS
+#When opening an macho binary using IDA, you may get a warning it is encrypted and IDA is going to process garbage.
+#Here is the method to get the binary decrpyted on IOS 8.1.2.
+#Download dumpdecrypted from Setfan Esser and compile it:
+$ git clone https://github.com/stefanesser/dumpdecrypted.git
+$ cd dumpdecrypted/
+$ make
+`xcrun --sdk iphoneos --find gcc` -Os  -Wimplicit -isysroot `xcrun --sdk iphoneos --show-sdk-path` -F`xcrun --sdk iphoneos --show-sdk-path`/System/Library/Frameworks -F`xcrun --sdk iphoneos --show-sdk-path`/System/Library/PrivateFrameworks -arch armv7 -arch armv7s -arch arm64 -c -o dumpdecrypted.o dumpdecrypted.c 
+`xcrun --sdk iphoneos --find gcc` -Os  -Wimplicit -isysroot `xcrun --sdk iphoneos --show-sdk-path` -F`xcrun --sdk iphoneos --show-sdk-path`/System/Library/Frameworks -F`xcrun --sdk iphoneos --show-sdk-path`/System/Library/PrivateFrameworks -arch armv7 -arch armv7s -arch arm64 -dynamiclib -o dumpdecrypted.dylib dumpdecrypted.o
+$ scp dumpdecrypted.dylib ios:
+
+#Run the application the following way:
+
+# DYLD_INSERT_LIBRARIES=/var/root/dumpdecrypted.dylib /var/mobile/Containers/Bundle/Application/{UID}/App.app/App 
+mach-o decryption dumper
+
+DISCLAIMER: This tool is only meant for security research purposes, not for application crackers.
+
+[+] detected 32bit ARM binary in memory.
+[+] offset to cryptid found: @0xb7a78(from 0xb7000) = a78
+[+] Found encrypted data at address 00004000 of length 1622016 bytes - type 1.
+[+] Opening /private/var/mobile/Containers/Bundle/Application/{UID}/App.app/App for reading.
+[+] Reading header
+[+] Detecting header type
+[+] Executable is a plain MACH-O image
+[+] Opening App.decrypted for writing.
+[+] Copying the not encrypted start of the file
+[+] Dumping the decrypted data into the file
+[+] Copying the not encrypted remainder of the file
+[+] Setting the LC_ENCRYPTION_INFO->cryptid to 0 at offset a78
+[+] Closing original file
+[+] Closing dump file

@@ -1,0 +1,36 @@
+#Sources found at the following location
+/private/etc/apt/sources.list.d/cydia.list
+
+#Extracted from presentation of RDC, should include at least the following
+deb http://cydia.angelxwind.net/ ./
+deb http://repo.nesolabs.de/ ./
+deb https://appsec-labs.com/cydia/ ./
+deb http://cydia.iphonecake.com/ ./
+deb http://cydia.radare.org/ ./
+
+#Full backup of Dr Mike Cydia list
+deb http://apt.saurik.com/ ios/847.21 main
+deb http://repo.nesolabs.de/ ./
+deb http://appsec-labs.com/cydia/ ./
+deb http://cydia.iphonecake.com/ ./
+deb http://repo666.ultrasn0w.com/ ./
+deb http://cydia.zodttd.com/repo/cydia/ stable main
+deb http://apt.thebigboss.org/repofiles/cydia/ stable main
+deb http://cydia.radare.org/ ./
+deb http://apt.modmyi.com/ stable main
+deb http://cydia.myrepospace.com/sfan5/ ./
+deb http://cydia.angelxwind.net/ ./
+
+#Tools to install from APT
+coreutils basic-cmds adv-cmds file-cmds network-cmds shell-cmds findutils inetutils diffutils ldid odcctools com.innoying.sbutils com.ericasadun.utilities less wget tcpdump vim tar python unzip zip ired
+
+#Things to install from cydia
+BigBoss Recommended tools
+openssh
+appsync unified
+apt 0.7 strict
+snoop-it
+(Substrate)
+class dump z
+gdb
+appcake

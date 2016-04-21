@@ -1,0 +1,5 @@
+#Convert plist to xml
+plutil -convert xml1 -o - filename.plist
+
+#Convert plist back to binary
+plutil -convert binary1 -o - filename.plist

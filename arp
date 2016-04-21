@@ -1,0 +1,5 @@
+# Add static ARP entry
+$ sudo arp -s 10.0.0.2 00:0c:29:c0:94:bf
+
+#Delete
+sudo arp -d 10.0.0.2
