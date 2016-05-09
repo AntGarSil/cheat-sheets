@@ -11,8 +11,7 @@ $ scp dumpdecrypted.dylib ios:
 
 #Run the application the following way:
 
-# DYLD_INSERT_LIBRARIES=/var/root/dumpdecrypted.dylib /var/mobile/Containers/Bundle/Application/{UID}/App.app/App 
-mach-o decryption dumper
+# DYLD_INSERT_LIBRARIES=/var/root/dumpdecrypted.dylib /var/mobile/Containers/Bundle/Application/{UID}/App.app/App mach-o decryption dumper
 
 DISCLAIMER: This tool is only meant for security research purposes, not for application crackers.
 

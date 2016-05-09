@@ -1,6 +1,10 @@
 #Get application instance
 var a = [[UIApplication sharedApplication]]
 
+#Instantiate a class to call a method
+[[[MainViewController alloc] init] autorelease].showAdvancedSettingsView()
+[new MainViewController init].showAdvancedSettingsView()
+
 #Find current view controller.  We must find keyWindow property
 UIApp.keyWindow
 

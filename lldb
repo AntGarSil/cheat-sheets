@@ -8,8 +8,8 @@ debugserver-@(#)PROGRAM:debugserver  PROJECT:debugserver-320.2.89
  for armv7.
 Listening to port 1234 for a connection from *...
 
-#
-./debugserver -x backboard *:1234 /var/mobile/Applications/785185FA-23C1-413B-B2EC-85E5185C6F65/DamnVulnerableIOSApp.app/DamnVulnerableIOSApp
+# Attach to running app
+debugserver *:1234 --attach PID
 
 ##On your host
 $ lldb
@@ -51,3 +51,17 @@ test`-[Env isJailbroken] + 38:
 0x0012144a: 40 04 24 f0 0f 04 a5 46 04 f9 ed 82 04 f9 ef c2  @.$?..?F.??..???
 0x0012145a: 9c b0 43 f6 a6 30 00 24 c0 f2 9a 00 4b f2 ca 01  .?C??0.$??..K??.
 0x0012146a: c0 f2 a7 01 42 f6 ce 62 0a ad c0 f2 a8 02 0a 94  ??.B??b.???...
+
+## Once we know the hex pattern in memory, we can search for it in Hex Fiend
+## We can verify the assembly is correct (and output the encoding for our desired patch)
+$ echo "movs r0, #0x0;strb.w r0, [sp, #0xc0];" | ~/Downloads/clang+llvm-3.8.0-x86_64-apple-darwin/bin/llvm-mc -assemble -triple=thumbv7 -show-encoding
+	.text
+	movs	r0, #0                  @ encoding: [0x00,0x20]
+	strb.w	r0, [sp, #192]          @ encoding: [0x8d,0xf8,0xc0,0x00]
+
+
+##To reassemble the ipa file, we do the following
+1. Create a folder named Payload.
+2. Copy Myapp.app (from products of your project) into the Payload directory.
+3. Right click and Compress the Payload directory.
+4. Rename the zip file to Myapp.ipa.

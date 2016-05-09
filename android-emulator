@@ -1,0 +1,8 @@
+### Get target lists available for emulator
+android list targets
+
+### Create new avd (where -n is name and -t is target)
+android create avd -n my_android1.5 -t 1
+
+### Run avd
+emulator -avd my_android1.5 -scale 96dpi -dpi-device 160
