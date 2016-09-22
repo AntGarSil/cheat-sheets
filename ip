@@ -34,3 +34,10 @@ ip neighbor show
 ############# Tunnel all traffic through one interface excluding a range ###################
 sudo ip route add {excluded_range} via {gateway_for_excluded}
 sudo route add default gw {default_gateway} {default_interface}
+
+############# OSX all traffic through one interface excluding a range ######################
+Can change default gateway by reorganizing in the network GUI
+sudo route add -net $network -interface $interface -gateway $gateway
+
+Example:
+sudo route add -net 11.152 -interface en4 -gateway $gateway
