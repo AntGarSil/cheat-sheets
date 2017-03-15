@@ -1,14 +1,29 @@
-1. Load the 8021q module into the kernel.
+Configure an Ethernet interface as a VLAN trunk
+---------------------------------------------------
 
-sudo modprobe 8021q
+Suppose that a host requires access to two VLANs, both carried by a trunk connected to physical interface eth0. The assigned IP addresses for the host are 192.168.2.1/24 on VLAN 2 and 192.168.3.1/24 on VLAN 3.
 
-2. Create a new interface that is a member of a specific VLAN, VLAN id 10 is used in this example. Keep in mind you can only use physical interfaces as a base, creating VLAN's on virtual interfaces (i.e. eth0:1) will not work. We use the physical interface eth1 in this example. This command will add an additional interface next to the interfaces which have been configured already, so your existing configuration of eth1 will not be affected.
+[+] First install the vlan package if it is not already present:
 
-sudo vconfig add eth1 10
+apt-get install vlan
 
+[+] Turn off network-manager
 
-3. Assign an address to the new interface.
-sudo ip addr add 10.0.0.1/24 dev eth1.10
+sudo stop network-manager
 
-4. Set interface as default route
-sudo route add default dev eth1.10
+[+] Configuring interfaces
+
+vconfig add eth0 <VLAN ID> (you may get a warning message on the first one)
+example: vconfig add eth0 101
+
+ifconfig eth0.<VLAN ID> <IP Address>/24 up
+example: ifconfig eth0.101 192.168.1.10/24 up
+
+ifconfig eth0.<VLAN ID>
+
+Note: If any issues run, ifconfig eth0 0.0.0.0 up
+Note: Specify interface with nmap scanning (nmap -e eth0.101)
+Note: You will probably need to add individual routes for each vlan if you want to communicate between vlans, don't rely on your default gateway. (route add)
+
+[+] Remove Configuration
+vconfig rem eth0.101

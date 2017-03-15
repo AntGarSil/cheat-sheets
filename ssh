@@ -28,10 +28,3 @@ ssh user@example.com -C -c blowfish -X
 
 # For more information, see:
 # http://unix.stackexchange.com/q/12755/44856
-
-# Copy files and folders through ssh from remote host to pwd with tar.gz compression
-# when there is no rsync command available
-ssh user@example.com "cd /var/www/Shared/; tar zcf - asset1 asset2" | tar zxf -
-
-# Force password authentication
-ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no user@example.com

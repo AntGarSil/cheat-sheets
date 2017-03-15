@@ -1,6 +1,3 @@
-# Single target scan:
-nmap [target]
-
 # Scan from a list of targets:
 nmap -iL [list.txt]
 
@@ -10,11 +7,11 @@ nmap -6 [target]
 # OS detection:
 nmap -O --osscan_guess [target]
 
-# Save output to text file:
+# Save output:
 nmap -oN [output.txt] [target]
-
-# Save output to xml file:
 nmap -oX [output.xml] [target]
+nmap -oA [output] [target]
+nmap -oG [output.grep] [target]
 
 # Scan a specific port:
 nmap -source-port [port] [target]
@@ -67,6 +64,3 @@ nmap -T5 --min-parallelism=50 -n --script "ssl-heartbleed" -pT:443 127.0.0.1
 
 # Show all informations (debug mode)
 nmap -d ...
-
-#Sneaky beaky
-nmap -Dmicrosoft.com,github.com,fbi.gov,nsa.gov,google.com -sS -sV -T1 -f —mtu=24 —data-length=1227 target.tld
