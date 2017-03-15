@@ -19,3 +19,7 @@ openssl x509 -text -noout -in server.crt
 echo | openssl s_client -connect <hostname>:443 2> /dev/null | \
 awk '/-----BEGIN/,/END CERTIFICATE-----/' | \
 openssl x509 -noout -enddate
+
+#To get primitives in use
+openssl ciphers -v DES-CBC3-SHA
+DES-CBC3-SHA            SSLv3 Kx=RSA      Au=RSA  Enc=3DES(168) Mac=SHA1
