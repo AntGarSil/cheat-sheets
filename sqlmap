@@ -44,3 +44,6 @@
 
 # Get backdoor access to sql server | can give shell access
 ./sqlmap.py -r <request-file> --os-shell
+
+# Add time delay between each request
+./sqlamp.py -r <request-file> --delay=DELAY

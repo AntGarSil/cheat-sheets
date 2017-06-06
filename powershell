@@ -1,2 +1,5 @@
 #Download a file
 wget $url -OutFile $outputfile
+
+#Interactive shell from meterpreter
+powershell -exec bypass -File -

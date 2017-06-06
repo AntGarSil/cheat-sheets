@@ -28,3 +28,14 @@ ssh user@example.com -C -c blowfish -X
 
 # For more information, see:
 # http://unix.stackexchange.com/q/12755/44856
+
+# To force password authentication (stupid OSX)
+ssh -o 
+
+#### Hide from log files and origin
+#I don’t know any way to avoid /etc/ssh/sshrc to be executed, but you can’t easily hide from here you are connecting. First make a tunnel. Indeed ssh tunnels won’t execute that little snitch:
+$ ssh -N -L127.0.0.1:2020:127.0.0.1:4222 -i key user@target
+#Then connect to localhost on port 2020
+$ ssh -i key user@127.0.0.1 -p 2020 /bin/sh
+
+

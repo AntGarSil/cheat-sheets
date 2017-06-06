@@ -1,0 +1,8 @@
+#Get a tty shell with python
+python -c 'import pty; pty.spawn("/bin/sh")'
+
+#Get a tty shell with echo
+echo os.system('/bin/bash')
+
+#Get a tty shell with sh
+/bin/sh -i
